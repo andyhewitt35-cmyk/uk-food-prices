@@ -1,0 +1,84 @@
+# Morrisons product pages checked each day (robots.txt allows /products/; /api/ is not used).
+# One "slug/id" per line, picked to match the staples in the Apify basket. Lines starting with # are ignored.
+# milk
+morrisons-british-semi-skimmed-milk-4-pint/113240422
+morrisons-british-semi-skimmed-milk-2-pint/113239376
+morrisons-british-semi-skimmed-milk-6-pint/113240511
+morrisons-british-whole-milk-4-pint/113239405
+morrisons-british-whole-milk-2-pint/113240377
+morrisons-british-skimmed-milk-4-pint/113240772
+cravendale-filtered-fresh-semi-skimmed-milk-fresher-for-longer-2l/103084876
+cravendale-filtered-fresh-whole-milk-fresher-for-longer-2l/103050730
+# baked beans
+heinz-baked-beans-4x415g/100369227
+heinz-baked-beans-in-a-rich-tomato-sauce-6-x-415g/107311159
+heinz-baked-beans-in-rich-tomato-sauce-6-x-200g/114516101
+morrisons-baked-beans-410g/105859372
+morrisons-baked-beans-4x410g/105859348
+branston-baked-beans-4-x-410g/100369067
+# bread
+morrisons-white-medium-sliced-bread-800g/102369773
+morrisons-toastie-thick-sliced-white-bread-800g/102369722
+morrisons-wholemeal-medium-sliced-bread-800g/102370256
+warburtons-medium-white-bread-800g/102369669
+warburtons-thick-toastie-white-bread-800g/110123255
+hovis-soft-white-medium-bread-800g/102369829
+# eggs
+morrisons-large-free-range-eggs-6-pack/105828461
+morrisons-medium-free-range-eggs-12-pack/110250449
+morrisons-large-free-range-eggs-12-pack/105830001
+# butter
+morrisons-british-salted-butter-250g/107007886
+morrisons-unsalted-british-butter-250g/107007851
+kerrygold-salted-pure-irish-butter-200g/115363338
+# cheddar
+morrisons-british-mature-cheddar-400g/114285471
+morrisons-mature-cheddar-750g/113771653
+cathedral-city-british-mature-cheddar-cheese-700g/113737084
+# chicken
+morrisons-british-chicken-breast-fillets-630g/108444754
+morrisons-british-chicken-breast-fillets-1kg/108444711
+morrisons-british-chicken-breast-fillets-2kg/110970892
+# fruit and veg
+fyffes-bananas-5-pack/115455355
+fyffes-snack-size-bananas-7-pack/115455232
+morrisons-royal-gala-apples-6-pack/108682621
+morrisons-pink-lady-apples-4-pack/108418409
+morrisons-british-maris-piper-potatoes-2kg/113405101
+morrisons-british-white-potatoes-2-5kg/108414361
+morrisons-british-brown-onions-1kg/108504753
+morrisons-salad-tomatoes-6-pack/108389100
+morrisons-baby-plum-tomatoes-250g/108388174
+# pasta and rice
+morrisons-fusilli-1kg/114525956
+morrisons-spaghetti-500g/104794141
+morrisons-basmati-rice-1kg/104544029
+morrisons-easy-cook-long-grain-rice-1kg/109748952
+# cereal
+kellogg-s-corn-flakes-breakfast-cereal-450g/112341651
+morrisons-cornflakes-500g/107144346
+weetabix-cereal-48-pack/100116271
+morrisons-wheat-biscuits-24-pack/108566292
+# coffee
+nescafe-original-instant-coffee-300g/100140001
+nescafe-gold-blend-intense-coffee-190g/114995940
+nescafe-azera-americano-instant-coffee-140g/112450461
+morrisons-gold-roast-instant-coffee-200g/107117786
+# tea
+yorkshire-tea-bags-80s/100153485
+pg-tips-original-210-tea-bags/113741201
+tetley-original-tea-bags-x240/100153101
+morrisons-everyday-tea-bags-240-pack/111814891
+morrisons-everyday-tea-bags-80-pack/111815018
+# sugar
+tate-lyle-granulated-sugar-1kg/114600186
+tate-and-lyle-white-granulated-sugar-2kg/114502236
+# orange juice
+morrisons-100-fruit-smooth-orange-juice-1l/106166771
+morrisons-orange-juice-from-concentrate-smooth-1l/104418057
+tropicana-smooth-orange-juice-with-no-bits-1-8l/115894809
+# olive oil
+morrisons-extra-virgin-olive-oil-1l/109916899
+morrisons-olive-oil-1l/109916995
+filippo-berio-extra-virgin-olive-oil/100398280
+napolina-extra-virgin-olive-oil-1l/115240485

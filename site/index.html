@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<meta name="theme-color" content="#13294b">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Food prices">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>UK food prices – compare the supermarkets</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" href="favicon.png">
+<style>
+:root{--bg:#f4f5f7;--card:#fff;--ink:#1d2330;--mute:#636b7a;--line:#e2e5ea;--acc:#0b5cad;--navy:#13294b;--good:#2f7d32;--bad:#b42318;--warn:#a05000;--loy:#5b2a86}
+*{box-sizing:border-box}[hidden]{display:none!important}
+body{margin:0;font:15px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink)}
+header{background:var(--navy);color:#fff;padding:12px 16px;padding-top:max(12px,env(safe-area-inset-top))}
+header h1{margin:0;font-size:20px}header p{margin:3px 0 0;font-size:13px;opacity:.85}
+main{max-width:1000px;margin:0 auto;padding:12px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:12px}
+h2{font-size:16px;margin:0 0 8px}h3{font-size:15px;margin:0 0 6px}
+button{font:inherit;border:1px solid #c5cbd5;background:#fff;color:var(--ink);border-radius:8px;padding:8px 12px;cursor:pointer;min-height:44px}
+input[type=search]{font:inherit;font-size:16px;padding:8px 10px;border:1px solid #c5cbd5;border-radius:8px;min-width:0;min-height:48px;flex:1}
+.searchrow{display:flex;gap:8px}
+#go{background:var(--acc);border-color:var(--acc);color:#fff;font-weight:700;min-width:90px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.chip{background:#eef2f7;border:0;border-radius:999px;padding:6px 12px;font-size:14px;min-height:36px}
+.note{font-size:13px;color:var(--mute)}.err{color:var(--bad)}
+.status{font-size:13px;color:var(--mute);margin-top:10px;line-height:1.5}
+.status b{color:var(--ink);font-weight:600}
+.warnbox{background:#fff4e5;border:1px solid #f5c98b;color:#6b3a00;border-radius:10px;padding:8px 12px;margin-bottom:12px;font-size:14px}
+.shop{display:inline-block;color:#fff;font-size:12px;font-weight:700;border-radius:6px;padding:2px 7px;white-space:nowrap;min-width:84px;text-align:center}
+.s-tesco{background:#00539f}.s-sainsburys{background:#e05a00}.s-asda{background:#3a7d00}.s-aldi{background:#001e78}.s-morrisons{background:#00563f}
+.s-lidl{background:#0050aa}.s-waitrose{background:#4b6f24}.s-coop{background:#007aa3}.s-iceland{background:#c8102e}.s-ocado{background:#4d2177}
+/* same-product groups */
+.grp{border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-top:10px}
+.grp:first-of-type{margin-top:0}
+.grp h3 span{font-weight:400;color:var(--mute)}
+table{width:100%;border-collapse:collapse;font-size:14px}
+td{padding:7px 4px;border-top:1px solid var(--line);vertical-align:top}
+tr:first-child td{border-top:0}
+td.r{text-align:right;white-space:nowrap}
+.price{font-weight:700;font-size:16px}
+.best{color:var(--good);font-weight:700;font-size:12px}
+.loy{display:inline-block;color:var(--loy);background:#f3ecfa;border-radius:6px;padding:1px 6px;font-size:12.5px;font-weight:600;margin-top:2px}
+.promo{font-size:12.5px;color:var(--warn)}
+.was{font-size:12.5px;color:var(--mute);text-decoration:line-through}
+.when{font-size:12px;color:var(--mute)}.old{color:var(--warn)}
+.oos{font-size:12px;color:var(--bad);font-weight:600}
+/* all matches list */
+ul.items{list-style:none;margin:0;padding:0}
+ul.items li{display:grid;grid-template-columns:auto 1fr auto;gap:4px 10px;padding:10px 0;border-top:1px solid var(--line);align-items:start}
+ul.items li:first-child{border-top:0}
+ul.items li>*{min-width:0}
+.iname a{color:var(--ink);text-decoration:none;font-weight:600}
+.iname a:hover{text-decoration:underline}
+.iname .sub{display:block;font-size:13px;color:var(--mute)}
+.iprice{text-align:right;white-space:nowrap}
+.iprice .unit{display:block;font-size:13px;color:var(--mute)}
+.rank{font-size:12px;color:var(--mute);margin-left:4px}
+.more{margin-top:8px;width:100%}
+.links{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
+.links a{display:flex;align-items:center;justify-content:space-between;gap:6px;border:1px solid #c5cbd5;border-radius:8px;padding:9px 10px;color:var(--ink);text-decoration:none;font-size:14px;min-height:44px;background:#fff}
+.links a small{color:var(--mute);font-size:11.5px}
+.links a .dot{width:10px;height:10px;border-radius:50%;flex:none}
+.cov li{margin:4px 0}
+.summary{font-size:15px;margin:0 0 8px;padding:10px 12px;background:#f0f6ef;border-radius:10px}
+.summary b{font-size:16px}
+footer{max-width:1000px;margin:0 auto;padding:0 14px 30px;font-size:12px;color:var(--mute)}
+footer a{color:var(--mute)}
+@media(min-width:760px){.cols{display:grid;grid-template-columns:3fr 2fr;gap:12px}.cols>*{min-width:0}}
+</style>
+</head>
+<body>
+<header>
+  <h1>UK food prices</h1>
+  <p>Compare supermarket prices. Real prices only, each with the time it was checked.</p>
+</header>
+<main>
+  <div id="warn" class="warnbox" hidden></div>
+
+  <section class="card">
+    <form id="f" class="searchrow" autocomplete="off">
+      <input id="q" type="search" placeholder="e.g. Heinz beans 415g, semi-skimmed milk 4 pint" aria-label="Item to compare" enterkeyhint="search">
+      <button id="go" type="submit">Compare</button>
+    </form>
+    <div class="chips" id="chips"></div>
+    <div class="status" id="status">Loading prices…</div>
+  </section>
+
+  <div id="results" hidden>
+    <section class="card" id="sumCard" hidden><div id="summary"></div></section>
+    <section class="card" id="grpCard" hidden>
+      <h2>Same product at different shops</h2>
+      <div id="groups"></div>
+    </section>
+    <section class="card" id="listCard">
+      <h2 id="listTitle">All matches</h2>
+      <p class="note" id="listNote"></p>
+      <ul class="items" id="items"></ul>
+      <button class="more" id="moreBtn" hidden>Show all</button>
+    </section>
+  </div>
+
+  <section class="card">
+    <h2 id="linksTitle">Check on each shop's own website</h2>
+    <p class="note" id="linksNote">Opens that supermarket's own search. Use this for anything not in the list above, and for the shops we can't check.</p>
+    <div class="links" id="links"></div>
+  </section>
+
+  <section class="card">
+    <h2>Which shops are checked</h2>
+    <ul class="cov note" id="cov"></ul>
+  </section>
+</main>
+<footer>
+  <p>Online prices for home delivery. In-store prices, regional prices and offers can differ. Loyalty prices (Clubcard, Nectar, More Card) need the card and are shown separately, never as the main price. Unit prices are worked out from the pack size where it is known, so every shop is compared the same way.</p>
+  <p>Tesco, Sainsbury's, Asda and Aldi prices: <a href="https://apify.com/yappman/uk-supermarket-price-scraper" rel="noopener">UK Supermarket Price Scraper (Apify), yappman</a> free daily dataset, CC BY 4.0. Morrisons prices: Morrisons' public product pages. Personal tool, not affiliated with any retailer.</p>
+</footer>
+<script>
+"use strict";
+const SHOPS = {
+  tesco:{name:"Tesco",col:"#00539f",search:q=>"https://www.tesco.com/groceries/en-GB/search?query="+q},
+  sainsburys:{name:"Sainsbury's",col:"#e05a00",search:q=>"https://www.sainsburys.co.uk/gol-ui/SearchResults/"+q},
+  asda:{name:"Asda",col:"#3a7d00",search:q=>"https://www.asda.com/groceries/search/"+q},
+  morrisons:{name:"Morrisons",col:"#00563f",search:q=>"https://groceries.morrisons.com/search?q="+q},
+  aldi:{name:"Aldi",col:"#001e78",search:q=>"https://www.aldi.co.uk/results?q="+q},
+  lidl:{name:"Lidl",col:"#0050aa",search:q=>"https://www.lidl.co.uk/q/search?q="+q},
+  waitrose:{name:"Waitrose",col:"#4b6f24",search:q=>"https://www.waitrose.com/ecom/shop/search?&searchTerm="+q},
+  coop:{name:"Co-op",col:"#007aa3",search:q=>"https://www.coop.co.uk/products/search?query="+q},
+  iceland:{name:"Iceland",col:"#c8102e",search:q=>"https://www.iceland.co.uk/search?q="+q},
+  ocado:{name:"Ocado",col:"#4d2177",search:q=>"https://www.ocado.com/search?entry="+q}
+};
+const CHECKED = ["tesco","sainsburys","asda","aldi","morrisons"];
+const NOT_CHECKED = {
+  lidl:"Lidl UK doesn't sell groceries online, so there are no online prices to check.",
+  waitrose:"Waitrose blocks automated access from the servers this runs on.",
+  coop:"Co-op's site asks automated tools not to use its search (robots.txt), and its delivery shop blocks them.",
+  iceland:"Iceland's site asks automated tools not to use its search (robots.txt).",
+  ocado:"Ocado shows a bot check to automated tools, and we don't get round those."
+};
+const STAPLES = ["Milk","Bread","Eggs","Butter","Cheddar","Chicken breast","Bananas","Apples","Potatoes","Onions","Tomatoes","Pasta","Rice","Baked beans","Cereal","Coffee","Tea bags","Sugar","Orange juice","Olive oil"];
+const STOP = new Set(["the","a","an","of","and","in","with","x","for","pack","fresh","uk","british","price","prices","cheap","cheapest"]);
+const SYN = {oj:"orange juice",spuds:"potatoes",evoo:"extra virgin olive oil",toasty:"toastie",veg:"vegetables",ltr:"",litre:"",semi:"semi"};
+const JOIN = [[/cornflakes/g,"corn flakes"],[/beanz/g,"beans"],[/teabags/g,"tea bags"],[/semi[- ]?skimmed/g,"semi skimmed"],[/wheat ?biscuits|weetabix/g,m=>m+" wheat biscuits weetabix"]];
+let DATA=null, ITEMS=[], showAll=false, lastQ="";
+
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const fmtGBP=v=>v==null?"":(v<1?Math.round(v*100)+"p":"£"+v.toFixed(2));
+function fmtUnit(it){
+  if(it.u==null) return "";
+  if(it.uu==="kg") return fmtGBP(it.u)+"/kg";
+  if(it.uu==="l") return fmtGBP(it.u)+"/litre";
+  if(it.uu==="each") return (it.u<1?(Math.round(it.u*1000)/10)+"p":"£"+it.u.toFixed(2))+" each";
+  return "";
+}
+const UKT=new Intl.DateTimeFormat("en-GB",{timeZone:"Europe/London",day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"});
+const UKD=new Intl.DateTimeFormat("en-GB",{timeZone:"Europe/London",day:"numeric",month:"short"});
+function when(t){ if(!t) return ""; const d=new Date(t); return UKT.format(d).replace(",","")+" UK"; }
+function isOld(t){ return t && (Date.now()-new Date(t).getTime()) > 48*3600e3; }
+function shopTag(s){ return `<span class="shop s-${s}">${esc(SHOPS[s].name)}</span>`; }
+
+function norm(s){ s=s.toLowerCase().replace(/[’']/g,"").replace(/é/g,"e"); for(const [re,to] of JOIN) s=s.replace(re,to); return s; }
+function words(s){ return norm(s).replace(/[^a-z0-9.% ]+/g," ").split(/\s+/).filter(Boolean); }
+function stem(w){ if(w.length>4 && w.endsWith("oes")) return w.slice(0,-2); if(w.length>3 && w.endsWith("s") && !w.endsWith("ss")) return w.slice(0,-1); return w; }
+
+function parseQuery(raw){
+  let s=norm(raw);
+  let size=null;
+  const m=s.match(/(\d+)\s*[x×]\s*(\d+(?:\.\d+)?)\s*(kg|g|ml|l|ltr|litres?)\b/) || s.match(/(\d+(?:\.\d+)?)\s*(kg|g|ml|l|ltr|litres?|pints?|pt|pack|pk)\b/);
+  if(m){
+    let n=1,q,u;
+    if(m.length===4 && /x|×/.test(m[0])){ n=+m[1]; q=+m[2]; u=m[3]; } else { q=+m[1]; u=m[2]; }
+    q*=n;
+    if(u==="kg") size={q:q*1000,b:"g"}; else if(u==="g") size={q,b:"g"};
+    else if(/^(l|ltr|litre|litres)$/.test(u)) size={q:q*1000,b:"ml"}; else if(u==="ml") size={q,b:"ml"};
+    else if(/^(pint|pints|pt)$/.test(u)) size={q:q*568.261,b:"ml"};
+    else size={q,b:"each"};
+    s=s.replace(m[0]," ");
+  } else {
+    const e=s.match(/\b(\d+)\s*(eggs?|bananas?|apples?)\b/);
+    if(e){ size={q:+e[1],b:"each"}; s=s.replace(e[0]," "+e[2]+" "); }
+  }
+  let toks=words(s).map(w=>SYN[w]||w).join(" ").split(/\s+/).filter(w=>w && !STOP.has(w) && !/^\d+(\.\d+)?$/.test(w));
+  return {toks:[...new Set(toks)], size};
+}
+
+function prep(){
+  for(const it of DATA.items){
+    const txt=[it.n,it.b,it.c,it.z,SHOPS[it.s].name].join(" ");
+    it._w=new Set(words(txt).flatMap(w=>[w,stem(w)]));
+    it._wl=[...it._w];
+  }
+  ITEMS=DATA.items;
+}
+function tokHit(it,t){
+  const st=stem(t);
+  if(it._w.has(t)||it._w.has(st)) return true;
+  if(t.length>=4) return it._wl.some(w=>w.startsWith(t)||w.startsWith(st));
+  return false;
+}
+function sizeHit(it,size){
+  if(!size||!it.q) return false;
+  if(size.b!==it.qb) return false;
+  const near=(a,b)=>Math.abs(a-b) <= Math.max(6, b*0.03);
+  if(near(it.q,size.q)) return true;
+  // multipacks of the same can/bottle size, e.g. 4 x 415g when searching 415g
+  const m=(it.n+" "+(it.z||"")).toLowerCase().match(/(\d+)\s*[x×]\s*(\d+(?:\.\d+)?)\s*(g|ml)\b/);
+  return !!(m && near(+m[2],size.q));
+}
+
+function search(raw){
+  const {toks,size}=parseQuery(raw);
+  if(!toks.length && !size) return {items:[],toks,size,mode:"none"};
+  let full=ITEMS.filter(it=>toks.every(t=>tokHit(it,t)));
+  let mode="full";
+  if(!full.length && toks.length>1){
+    // closest: items matching the most words (at least half)
+    const scored=ITEMS.map(it=>[it,toks.filter(t=>tokHit(it,t)).length]).filter(x=>x[1]>=Math.ceil(toks.length/2));
+    const best=Math.max(0,...scored.map(x=>x[1]));
+    full=scored.filter(x=>x[1]===best).map(x=>x[0]); mode=full.length?"closest":"none";
+  }
+  let sizeNote="";
+  if(size && full.length){
+    const s=full.filter(it=>sizeHit(it,size));
+    if(s.length){ full=s; } else { sizeNote="No exact size match in today's list, so all sizes are shown – compare the unit prices."; }
+  }
+  return {items:full,toks,size,mode,sizeNote};
+}
+
+function sortByUnit(list){
+  const cnt={}; list.forEach(it=>{ if(it.uu) cnt[it.uu]=(cnt[it.uu]||0)+1; });
+  const main=Object.keys(cnt).sort((a,b)=>cnt[b]-cnt[a])[0];
+  const key=it=>it.uu===main?0:(it.u!=null?1:2);
+  return {main, list:list.slice().sort((a,b)=>key(a)-key(b) || (a.uu===b.uu && a.u!=null && b.u!=null ? a.u-b.u : 0) || a.p-b.p)};
+}
+
+function priceCell(it){
+  let h=`<span class="price">${fmtGBP(it.p)}</span>`;
+  if(it.w && it.w>it.p) h+=` <span class="was">${fmtGBP(it.w)}</span>`;
+  return h;
+}
+function extras(it){
+  let h="";
+  if(it.l!=null) h+=`<div><span class="loy">${esc(it.lt||"Member price")}: ${fmtGBP(it.l)}</span></div>`;
+  if(it.pr) h+=`<div class="promo">${esc(it.pr)}</div>`;
+  if(it.st===false) h+=`<div class="oos">Out of stock when checked</div>`;
+  return h;
+}
+function whenLine(it){ return `<span class="when${isOld(it.t)?" old":""}">checked ${esc(when(it.t))}${isOld(it.t)?" (older)":""}</span>`; }
+
+function render(raw){
+  lastQ=raw.trim();
+  const qEnc=encodeURIComponent(lastQ||"");
+  renderLinks(qEnc);
+  if(!lastQ){ $("results").hidden=true; return; }
+  const r=search(lastQ);
+  $("results").hidden=false;
+  // groups
+  const gids=[...new Set(r.items.filter(it=>it.g).map(it=>it.g))];
+  const groups=gids.map(g=>ITEMS.filter(it=>it.g===g)).filter(g=>g.length>1);
+  $("grpCard").hidden=!groups.length;
+  $("groups").innerHTML=groups.map(g=>{
+    g.sort((a,b)=>a.p-b.p);
+    const cheapest=g[0].p;
+    return `<div class="grp"><h3>${esc(g[0].b?titleCase(g[0].b):"")} <span>${esc(g[0].z)}</span></h3><table>${g.map(it=>`<tr>
+      <td>${shopTag(it.s)}</td>
+      <td><a href="${esc(it.url)}" target="_blank" rel="noopener">${esc(it.n)}</a>${extras(it)}<div>${whenLine(it)}</div></td>
+      <td class="r">${priceCell(it)}<div class="note">${esc(fmtUnit(it))}</div>${it.p===cheapest?'<div class="best">Cheapest</div>':""}</td></tr>`).join("")}</table></div>`;
+  }).join("");
+  // list
+  const {main,list}=sortByUnit(r.items);
+  const shopsHit=new Set(list.map(it=>it.s));
+  const missing=CHECKED.filter(s=>!shopsHit.has(s)).map(s=>SHOPS[s].name);
+  $("listTitle").textContent = r.mode==="closest" ? "Closest matches" : (list.length ? `All matches (${list.length})` : "No matches in today's checked list");
+  let note=[];
+  if(list.length && main) note.push(`Cheapest per ${main==="l"?"litre":main==="kg"?"kg":"item"} first.`);
+  if(r.mode==="closest") note.push("Nothing matched every word, so these are the nearest.");
+  if(r.sizeNote) note.push(r.sizeNote);
+  if(list.length && missing.length) note.push(`Not in today's checked list at ${missing.join(", ")} – that doesn't mean they don't sell it; use the links below.`);
+  if(!list.length) note.push("We only check about 280 everyday products (20 staples). Use the links below to search each shop.");
+  $("listNote").textContent=note.join(" ");
+  const shown = showAll ? list : list.slice(0,25);
+  let rank=0;
+  $("items").innerHTML=shown.map(it=>{
+    const r1 = it.uu===main && it.u!=null ? ++rank : 0;
+    return `<li>
+      <div>${shopTag(it.s)}</div>
+      <div class="iname"><a href="${esc(it.url)}" target="_blank" rel="noopener">${esc(it.n)}</a>
+        <span class="sub">${esc(it.z||"size not given")} · ${whenLine(it)}</span>${extras(it)}</div>
+      <div class="iprice">${priceCell(it)}<span class="unit">${esc(fmtUnit(it))||"&nbsp;"}</span>${r1===1&&list.length>1?'<span class="best">Best per unit</span>':""}</div>
+    </li>`;}).join("");
+  $("moreBtn").hidden = list.length<=25 || showAll;
+  $("moreBtn").textContent=`Show all ${list.length}`;
+  // summary: cheapest per unit at each checked shop
+  const best={};
+  list.filter(it=>it.uu===main && it.u!=null && it.st!==false).forEach(it=>{ if(!best[it.s]||it.u<best[it.s].u) best[it.s]=it; });
+  const order=Object.values(best).sort((a,b)=>a.u-b.u);
+  if(order.length>1){
+    $("sumCard").hidden=false;
+    $("summary").innerHTML=`<div class="summary">Cheapest per ${main==="l"?"litre":main==="kg"?"kg":"item"}: <b>${esc(SHOPS[order[0].s].name)}</b> – ${esc(order[0].n)} ${esc(order[0].z)}, ${fmtGBP(order[0].p)} (${esc(fmtUnit(order[0]))})</div>
+      <table>${order.map((it,i)=>`<tr><td>${i+1}.</td><td>${shopTag(it.s)}</td><td>${esc(it.n)} <span class="note">${esc(it.z)}</span></td><td class="r"><b>${esc(fmtUnit(it))}</b><div class="note">${fmtGBP(it.p)}</div></td></tr>`).join("")}</table>
+      <p class="note">Best unit price at each shop for “${esc(lastQ)}”, using the products we check. Own-label and branded items are mixed, so check the names.</p>`;
+  } else $("sumCard").hidden=true;
+}
+function titleCase(s){ return s.toLowerCase().replace(/\b[a-z]/g,c=>c.toUpperCase()).replace(/'S\b/g,"'s"); }
+
+function renderLinks(qEnc){
+  const order=["tesco","asda","sainsburys","morrisons","aldi","lidl","waitrose","coop","iceland","ocado"];
+  $("linksTitle").textContent = lastQ ? `Search “${lastQ}” on each shop's website` : "Check on each shop's own website";
+  $("links").innerHTML=order.map(s=>`<a href="${esc(SHOPS[s].search(qEnc))}" target="_blank" rel="noopener"><span><span class="dot" style="display:inline-block;background:${SHOPS[s].col}"></span> ${esc(SHOPS[s].name)}</span><small>${CHECKED.includes(s)?"":"not checked"}</small></a>`).join("");
+}
+
+function renderStatus(){
+  const s=DATA.sources||{};
+  const a=s.apify||{}, m=s.morrisons||{};
+  const parts=[];
+  parts.push(`<b>Tesco, Sainsbury's, Asda, Aldi:</b> ${a.latest?esc(when(a.latest)):"not available"}${a.ok===false?' <span class="err">(update failed – older prices)</span>':""}`);
+  parts.push(`<b>Morrisons:</b> ${m.latest?esc(when(m.latest)):"not available"}${m.ok===false?' <span class="err">(update failed – older prices)</span>':""}`);
+  parts.push(`<b>${DATA.items.length}</b> products · not checked: Lidl, Waitrose, Co-op, Iceland, Ocado (links only)`);
+  $("status").innerHTML="Prices checked – "+parts.join("<br>");
+  const warn=[];
+  if(a.ok===false||m.ok===false) warn.push("The last price update didn't fully work, so some prices are older than usual – see the dates.");
+  if(isOld(a.latest)) warn.push("Tesco, Sainsbury's, Asda and Aldi prices are more than 2 days old.");
+  if(warn.length){ $("warn").hidden=false; $("warn").textContent=warn.join(" "); }
+  $("cov").innerHTML=
+    `<li>${shopTag("tesco")} ${shopTag("sainsburys")} ${shopTag("asda")} ${shopTag("aldi")}<br>Checked daily (about 06:30 UK) from a free public price dataset: about 210 products across 20 staples, with unit and loyalty prices.</li>
+     <li>${shopTag("morrisons")}<br>About 65 matching products read from Morrisons' own product pages each morning and evening.</li>`+
+    Object.entries(NOT_CHECKED).map(([k,v])=>`<li>${shopTag(k)} <b>Not checked.</b> ${esc(v)} Use the link above.</li>`).join("");
+}
+
+function go(q){ showAll=false; $("q").value=q; render(q); const u=new URL(location.href); if(q) u.searchParams.set("q",q); else u.searchParams.delete("q"); history.replaceState(null,"",u); }
+$("f").addEventListener("submit",e=>{ e.preventDefault(); $("q").blur(); go($("q").value); });
+$("moreBtn").addEventListener("click",()=>{ showAll=true; render(lastQ); });
+$("chips").innerHTML=STAPLES.map(s=>`<button type="button" class="chip">${esc(s)}</button>`).join("");
+$("chips").addEventListener("click",e=>{ const b=e.target.closest(".chip"); if(b) go(b.textContent); });
+renderLinks("");
+
+fetch("data.json",{cache:"no-cache"}).then(r=>{ if(!r.ok) throw new Error("HTTP "+r.status); return r.json(); }).then(d=>{
+  DATA=d; prep(); renderStatus();
+  const q=new URL(location.href).searchParams.get("q");
+  if(q) go(q);
+}).catch(e=>{ $("status").innerHTML=`<span class="err">Couldn't load prices (${esc(e.message)}). Try again in a minute, or use the shop links below.</span>`; });
+</script>
+</body>
+</html>
